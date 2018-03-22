@@ -78,11 +78,21 @@ if ! [[ "$BG_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|in
 		exit 1
 fi
 
-mkdir test2
 
-for i in `seq $TEXT_START_POS -40 $TEXT_END_POS`;
-do
-	echo $i
-	convert -size 127x127 xc:none -font "AndaleMono" -pointsize 120 -fill $TEXT_COLOR -draw "text $i,90 \" $GIF_TEXT" test2/$IMAGE_INDEX.png
-	((IMAGE_INDEX++))
-done
+convert -size 128x128 xc:$BG_COLOR padding.png
+convert -background $BG_COLOR -fill $TEXT_COLOR -font Arial -size x128 label:$GIF_TEXT center.png
+convert padding.png center.png padding.png +append res.png
+rm padding.png
+rm center.png
+
+IMG_WIDTH="$(convert res.png -ping -format "%w\n" info:)"
+
+echo "SHIT $IMG_WIDTH"
+
+
+#for i in `seq $TEXT_START_POS -40 $TEXT_END_POS`;
+#do
+#	echo $i
+#	convert -size 127x127 xc:none -font "AndaleMono" -pointsize 120 -fill $TEXT_COLOR -draw "text $i,90 \" $GIF_TEXT" test2/$IMAGE_INDEX.png
+#	((IMAGE_INDEX++))
+#done
