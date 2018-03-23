@@ -8,10 +8,9 @@ if [[ $OS_NAME != 'Darwin' ]] && [[ $OS_NAME != 'Linux' ]];
 		do
 			echo "Meow" >> $i.txt
 		done
+		exit
 fi
 
-
-exit
 # The text
 GIF_TEXT="$1"
 shift
