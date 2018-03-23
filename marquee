@@ -3,7 +3,7 @@
 # gift [text] -n
 
 # The text?
-GIF_TEXT=$1
+GIF_TEXT="$1"
 shift
 
 # Default number of frames in the gif is set to 20
@@ -15,6 +15,8 @@ TEXT_COLOR="black"
 # 4:th argument is the background color
 BG_COLOR="white"
 
+FILE_NAME="out.gif"
+
 # Start position of the text.
 TEXT_START_POS=45
 
@@ -23,15 +25,13 @@ echo "text: $TEXT_END_POS"
 TEXT_END_POS=$((TEXT_END_POS*-124))
 echo "text2: $TEXT_END_POS"
 
-
-IMAGE_INDEX=0
-
-## echo $TEXT_END_POS
-
 # Check flags 
 while [ "$1" ]
 do
 	case $1 in
+		-name)
+			$
+		;;
 		-frames)
 			shift
 			NR_OF_FRAMES=$1
@@ -78,21 +78,43 @@ if ! [[ "$BG_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|in
 		exit 1
 fi
 
+if ! [ -d "/tmp/marquee" ];
+	then
+		mkdir /tmp/marquee
+fi
 
-convert -size 128x128 xc:$BG_COLOR padding.png
-convert -background $BG_COLOR -fill $TEXT_COLOR -font Arial -size x128 label:$GIF_TEXT center.png
-convert padding.png center.png padding.png +append res.png
-rm padding.png
-rm center.png
+convert -size 128x128 xc:$BG_COLOR /tmp/marquee/padding.png
+convert -background $BG_COLOR -fill $TEXT_COLOR -font Arial -size x128 label:"$GIF_TEXT" /tmp/marquee/center.png
+convert /tmp/marquee/padding.png /tmp/marquee/center.png /tmp/marquee/padding.png +append /tmp/marquee/res.png
+rm /tmp/marquee/padding.png
+rm /tmp/marquee/center.png
 
-IMG_WIDTH="$(convert res.png -ping -format "%w\n" info:)"
+IMG_WIDTH="$(convert /tmp/marquee/res.png -ping -format "%w\n" info:)"
 
 echo "SHIT $IMG_WIDTH"
 
+IMG_INDEX=0
 
-#for i in `seq $TEXT_START_POS -40 $TEXT_END_POS`;
-#do
-#	echo $i
-#	convert -size 127x127 xc:none -font "AndaleMono" -pointsize 120 -fill $TEXT_COLOR -draw "text $i,90 \" $GIF_TEXT" test2/$IMAGE_INDEX.png
-#	((IMAGE_INDEX++))
-#done
+for i in `seq 0 20 $((IMG_WIDTH-128))`;
+do
+	convert -crop 128x128+$i+0 +repage /tmp/marquee/res.png /tmp/marquee/$IMG_INDEX.png
+	IMG_TMP_NAME="/tmp/marquee/"$IMG_INDEX
+	IMG_TMP_NAME=$IMG_TMP_NAME".png "
+	GIF_FILES=$GIF_FILES$IMG_TMP_NAME
+	#$GIF_FILES"~/.marquee-tmp/$IMG_INDEX.png "
+	((IMG_INDEX++))
+done
+
+ls /tmp/marquee/
+echo "After"
+
+rm /tmp/marquee/res.png
+
+#echo $GIF_FILES
+
+sleep 10
+
+convert -delay 10 $GIF_FILES out.gif
+
+# Clean up
+#rm ~/.marquee-tmp/*
