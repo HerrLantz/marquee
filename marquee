@@ -31,7 +31,7 @@ do
 			shift
 			NR_OF_FRAMES="$1"
 			#echo $NR_OF_FRAMES
-		;;
+		;;m
 		-text-color | -c)
 			shift
 			TEXT_COLOR=$1

@@ -26,3 +26,23 @@ or you can add that line to your *.bash_profile* or wherever you want to export 
 ## Creating marquee gifs
 To run **Marquee** simply type `marquee [text] [OPTIONS]` in the terminal.
 If you are having trouble running **Marquee**, type `marquee -help` or `marquee -h` to get various help.
+
+
+Here are all the different flags that can be used! Look how nice they are.
+
+|Flag	             |Parameter	      |Effect                       |
+|:-------------------|:--------------:|----------------------------:|
+|-name/-n            |.+\\.gif        |The name of the outputed gif |
+|-text-color/-c.     |name of a color |Sets the text color 		    |
+|-background-color/-b|name of a color |Sets the background color    |
+|-help/-h            |no parameter    |Gives help to slow people    |
+|-delay/-d 			 |Positiv integer |Sets the delay between frames|
+|-font/-f            |Name of font    |Sets the font on the text    |
+|-frames/-f          |Positiv integer |Depricated, does nothing     |
+
+## Examples
+
+```
+marquee "Marquee is the best program ever" -background-color none -text-color magenta
+```
+![A great example](https://github.com/herrlantz/examples/example1.gif)
