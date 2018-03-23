@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# gift [text] -n
-
-# The text?
+# The text
 GIF_TEXT="$1"
 shift
 
@@ -18,6 +16,8 @@ BG_COLOR="white"
 FILE_NAME="out.gif"
 
 DELAY=0
+
+FONT="Arial"
 
 # Check flags 
 while [ "$1" ]
@@ -49,6 +49,10 @@ do
 		-delay | -d)
 			shift
 			DELAY=$1
+		;;
+		-font | -t)
+			shift
+			FONT="$1"
 		;;
 		*)
 			echo "What is this? --> $1" >&2
@@ -84,7 +88,7 @@ fi
 
 # Add 3 Images together, a center with the text and two padding images that only contain the background color
 convert -size 128x128 xc:$BG_COLOR /tmp/marquee/padding.png
-convert -background $BG_COLOR -fill $TEXT_COLOR -font Arial -size x128 label:"$GIF_TEXT" /tmp/marquee/center.png
+convert -background $BG_COLOR -fill $TEXT_COLOR -font "$FONT" -size x128 label:"$GIF_TEXT" /tmp/marquee/center.png
 convert /tmp/marquee/padding.png /tmp/marquee/center.png /tmp/marquee/padding.png +append /tmp/marquee/res.png
 
 # Remove center and padding of the image
