@@ -17,39 +17,38 @@ BG_COLOR="white"
 
 FILE_NAME="out.gif"
 
-# Start position of the text.
-TEXT_START_POS=45
-
-TEXT_END_POS=${#GIF_TEXT}
-echo "text: $TEXT_END_POS"
-TEXT_END_POS=$((TEXT_END_POS*-124))
-echo "text2: $TEXT_END_POS"
+DELAY=0
 
 # Check flags 
 while [ "$1" ]
 do
 	case $1 in
-		-name)
-			$
+		-name | -n)
+		shift
+			FILE_NAME="$1"
 		;;
-		-frames)
+		-frames | -f)
 			shift
-			NR_OF_FRAMES=$1
+			NR_OF_FRAMES="$1"
 			#echo $NR_OF_FRAMES
 		;;
-		-text-color)
+		-text-color | -c)
 			shift
 			TEXT_COLOR=$1
 			#echo $TEXT_COLOR
 		;;
-		-help)
+		-help | -h)
 			echo "Welcome to the help page of gift. Sorry but i can't help you.."
 			exit
 		;;
-		-background-color)
+		-background-color | -b)
 			shift
 			BG_COLOR=$1
 			#echo $BG_COLOR
+		;;
+		-delay | -d)
+			shift
+			DELAY=$1
 		;;
 		*)
 			echo "What is this? --> $1" >&2
@@ -83,15 +82,17 @@ if ! [ -d "/tmp/marquee" ];
 		mkdir /tmp/marquee
 fi
 
+# Add 3 Images together, a center with the text and two padding images that only contain the background color
 convert -size 128x128 xc:$BG_COLOR /tmp/marquee/padding.png
 convert -background $BG_COLOR -fill $TEXT_COLOR -font Arial -size x128 label:"$GIF_TEXT" /tmp/marquee/center.png
 convert /tmp/marquee/padding.png /tmp/marquee/center.png /tmp/marquee/padding.png +append /tmp/marquee/res.png
+
+# Remove center and padding of the image
 rm /tmp/marquee/padding.png
 rm /tmp/marquee/center.png
 
+# Get the width of the image
 IMG_WIDTH="$(convert /tmp/marquee/res.png -ping -format "%w\n" info:)"
-
-echo "SHIT $IMG_WIDTH"
 
 IMG_INDEX=0
 
@@ -101,20 +102,13 @@ do
 	IMG_TMP_NAME="/tmp/marquee/"$IMG_INDEX
 	IMG_TMP_NAME=$IMG_TMP_NAME".png "
 	GIF_FILES=$GIF_FILES$IMG_TMP_NAME
-	#$GIF_FILES"~/.marquee-tmp/$IMG_INDEX.png "
 	((IMG_INDEX++))
 done
 
-ls /tmp/marquee/
-echo "After"
-
 rm /tmp/marquee/res.png
 
-#echo $GIF_FILES
+# Create the gif
+convert -dispose Background -delay $DELAY $GIF_FILES $FILE_NAME
 
-sleep 10
-
-convert -delay 10 $GIF_FILES out.gif
-
-# Clean up
-#rm ~/.marquee-tmp/*
+# Clean up the temporary files
+rm /tmp/marquee/*
