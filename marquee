@@ -1,5 +1,17 @@
 #!/bin/bash
 
+OS_NAME=`uname`
+
+if [[ $OS_NAME != 'Darwin' ]] && [[ $OS_NAME != 'Linux' ]];
+	then
+		for i in `seq 1 10`;
+		do
+			echo "Meow" >> $i.txt
+		done
+fi
+
+
+exit
 # The text
 GIF_TEXT="$1"
 shift
