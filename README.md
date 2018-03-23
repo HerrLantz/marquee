@@ -50,4 +50,4 @@ marquee "Marquee is the best program ever" -background-color none -text-color ma
 ```
 marquee "Color blind people are superior" -b yellow -c brown
 ```
-![Another great example](https://raw.githubusercontent.com/HerrLantz/marquee/master/examples/example1.gif "I wish I was like Patric")
+![Another great example](https://raw.githubusercontent.com/HerrLantz/marquee/master/examples/example2.gif "I wish I was like Patric")
