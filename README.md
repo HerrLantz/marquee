@@ -45,4 +45,9 @@ Here are all the different flags that can be used! Look how nice they are.
 ```
 marquee "Marquee is the best program ever" -background-color none -text-color magenta
 ```
-![A great example](https://github.com/herrlantz/examples/example1.gif)
+![A great example](https://raw.githubusercontent.com/HerrLantz/marquee/master/examples/example1.gif "Look at that nice text")
+
+```
+marquee "Color blind people are superior" -b yellow -c brown
+```
+![Another great example](https://raw.githubusercontent.com/HerrLantz/marquee/master/examples/example1.gif "I wish I was like Patric")
