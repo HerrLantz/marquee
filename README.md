@@ -54,4 +54,4 @@ marquee "Color blind people are superior" -b yellow -c brown
 
 ## Windows
 
-I don't like Windows, so the script won't generate a gif on that platform. Istead it creates a bunch of files with *Meow* in it.
+I don't like Windows, so the script won't generate a gif on that platform. Instead it creates a bunch of files with *Meow* in it.
