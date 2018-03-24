@@ -30,15 +30,16 @@ If you are having trouble running **Marquee**, type `marquee -help` or `marquee 
 
 Here are all the different flags that can be used! Look how nice they are.
 
-|Flag	             |Parameter	      |Effect                       |
-|:-------------------|:--------------:|----------------------------:|
-|-name/-n            |.+\\.gif        |The name of the outputed gif |
-|-text-color/-c.     |name of a color |Sets the text color 		    |
-|-background-color/-b|name of a color |Sets the background color    |
-|-help/-h            |no parameter    |Gives help to slow people    |
-|-delay/-d 			 |Positiv integer |Sets the delay between frames|
-|-font/-f            |Name of font    |Sets the font on the text    |
-|-frames/-f          |Positiv integer |Depricated, does nothing     |
+|Flag	             |Parameter	      |Effect                         |
+|:-------------------|:--------------:|------------------------------:|
+|-name/-n            |.+\\.gif        |The name of the outputed gif   |
+|-text-color/-c.     |name of a color |Sets the text color 		      |
+|-background-color/-b|name of a color |Sets the background color      |
+|-help/-h            |no parameter    |Gives help to slow people      |
+|-delay/-d 			 |Positiv integer |Sets the delay between frames  |
+|-font/-f            |Name of font    |Sets the font on the text      |
+|-frames/-f          |Positiv integer |Depricated, does nothing       |
+|-optimization/-o    |0, 1, 2 or 3    |Optimizes the file size (lossy)|
 
 ## Examples
 
