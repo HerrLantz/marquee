@@ -30,6 +30,9 @@ DELAY=0
 
 FONT="Arial"
 
+OPTIMIZATION=0
+OPT_ON=false
+
 # Check flags 
 while [ "$1" ]
 do
@@ -65,6 +68,11 @@ do
 			shift
 			FONT="$1"
 		;;
+		-optimize | -o)
+			shift
+			OPTIMIZATION=$1
+			OPT_ON=true
+		;;
 		*)
 			echo "What is this? --> $1" >&2
 			exit 1
@@ -92,10 +100,18 @@ if ! [[ "$BG_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|in
 		exit 1
 fi
 
+if ! [[ "$OPTIMIZATION" =~ ^(0|1|2|3)$ ]]
+	then
+		echo "Illegal argument: $OPTIMIZATION" >&2
+		exit 1
+fi
+
+# Create a temporary dir for marquee to put temporary files
 if ! [ -d "/tmp/marquee" ];
 	then
 		mkdir /tmp/marquee
 fi
+
 
 # Add 3 Images together, a center with the text and two padding images that only contain the background color
 convert -size 128x128 xc:$BG_COLOR /tmp/marquee/padding.png
@@ -123,7 +139,14 @@ done
 rm /tmp/marquee/res.png
 
 # Create the gif
-convert -dispose Background -delay $DELAY $GIF_FILES $FILE_NAME
+convert -dispose Background -coalesce -colors 8 -delay $DELAY $GIF_FILES $FILE_NAME
+
+# Optimize the file size of the gif with gifsicle
+if $OPT_ON ; then
+	echo "Why?"
+	echo $OPT_ON
+	gifsicle -O3 $FILE_NAME -o $FILE_NAME
+fi
 
 # Clean up the temporary files
 rm /tmp/marquee/*
