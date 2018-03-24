@@ -9,14 +9,18 @@ git clone https://github.com/HerrLantz/marquee
 
 ### Prerequisites
 
-**Marquee** requires [ImageMagick](https://www.imagemagick.org/script/index.php)!
+**Marquee** requires [ImageMagick](https://www.imagemagick.org/script/index.php) and [Gifsicle](http://www.lcdf.org/gifsicle/)!
 
-Install it on Mac with brew:
+Install ImageMagick on Mac with homebrew:
 ```
 brew install imagemagick
 ```
+Install Gifsicle on Mac with homebrew:
+```
+brew install gifsicle
+```
 
-After you have installed imagemagick and downloaded **Marquee** then put the **Marquee** in some directory.
+After you have installed imagemagick, gifsicle and downloaded **Marquee**; then put the **Marquee** in some directory.
 Export the **Marquee** directory path to your $PATH by:
 ```
 export PATH=$PATH:/path/to/marquee
