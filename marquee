@@ -143,8 +143,6 @@ convert -dispose Background -coalesce -colors 8 -delay $DELAY $GIF_FILES $FILE_N
 
 # Optimize the file size of the gif with gifsicle
 if $OPT_ON ; then
-	echo "Why?"
-	echo $OPT_ON
 	gifsicle -O3 $FILE_NAME -o $FILE_NAME
 fi
 
