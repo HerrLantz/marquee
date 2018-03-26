@@ -20,6 +20,13 @@ Install Gifsicle on Mac with homebrew:
 brew install gifsicle
 ```
 
+Install on debian-based linux distributions:
+```
+sudo apt-get update
+sudo apt-get install imagemagick
+sudo apt-get install gifsicle
+```
+
 After you have installed imagemagick, gifsicle and downloaded **Marquee**; then put the **Marquee** in some directory.
 Export the **Marquee** directory path to your $PATH by:
 ```
