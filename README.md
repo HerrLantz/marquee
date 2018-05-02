@@ -39,6 +39,7 @@ Change the file mode on *marquee* by
 chmod 755 marquee
 ```
 
+
 ## Creating marquee gifs
 To run **Marquee** simply type `marquee [text] [OPTIONS]` in the terminal.
 If you are having trouble running **Marquee**, type `marquee -help` or `marquee -h` to get various help.
