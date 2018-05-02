@@ -12,20 +12,25 @@ git clone https://github.com/HerrLantz/marquee
 **Marquee** requires [ImageMagick](https://www.imagemagick.org/script/index.php) and [Gifsicle](http://www.lcdf.org/gifsicle/)!
 
 Install ImageMagick on Mac with homebrew:
-```
+```bash
 brew install imagemagick
 ```
 Install Gifsicle on Mac with homebrew:
-```
+```bash
 brew install gifsicle
 ```
 
 After you have installed imagemagick, gifsicle and downloaded **Marquee**; then put the **Marquee** in some directory.
 Export the **Marquee** directory path to your $PATH by:
-```
+```bash
 export PATH=$PATH:/path/to/marquee
 ```
 or you can add that line to your *.bash_profile* or wherever you want to export your $PATH.
+
+Change the file mode on *marquee* by
+```bash
+chmod 755 marquee
+```
 
 ## Creating marquee gifs
 To run **Marquee** simply type `marquee [text] [OPTIONS]` in the terminal.
@@ -41,7 +46,7 @@ Here are all the different flags that can be used! Look how nice they are.
 |-background-color/-b|name of a color |Sets the background color      |
 |-help/-h            |no parameter    |Gives help to slow people      |
 |-delay/-d 			 |Positiv integer |Sets the delay between frames  |
-|-font/-f            |Name of font    |Sets the font on the text      |
+|-font/-t            |Name of font    |Sets the font on the text      |
 |-frames/-f          |Positiv integer |Depricated, does nothing       |
 |-optimization/-o    |0, 1, 2 or 3    |Optimizes the file size (lossy)|
 
