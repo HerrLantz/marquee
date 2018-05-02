@@ -34,7 +34,7 @@ export PATH=$PATH:/path/to/marquee
 ```
 or you can add that line to your *.bash_profile* or wherever you want to export your $PATH.
 
-Change the file mode on *marquee* by
+Micke, you should change the file mode on *marquee* by
 ```bash
 chmod 755 marquee
 ```
