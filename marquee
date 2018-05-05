@@ -139,7 +139,7 @@ IMG_WIDTH="$(convert /tmp/marquee/res.png -ping -format "%w\n" info:)"
 
 IMG_INDEX=0
 
-for i in `seq 0 50 $((IMG_WIDTH-128))`;
+for i in `seq 0 $SPEED $((IMG_WIDTH-128))`;
 do
 	convert -crop 128x128+$i+0 +repage /tmp/marquee/res.png /tmp/marquee/$IMG_INDEX.png
 	IMG_TMP_NAME="/tmp/marquee/"$IMG_INDEX
