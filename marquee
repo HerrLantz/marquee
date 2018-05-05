@@ -33,6 +33,8 @@ FONT="Arial"
 OPTIMIZATION=0
 OPT_ON=false
 
+SPEED=20
+
 # Check flags 
 while [ "$1" ]
 do
@@ -73,6 +75,10 @@ do
 			OPTIMIZATION=$1
 			OPT_ON=true
 		;;
+		-optimize | -s)
+			shift
+			SPEED=$1
+		;;
 		*)
 			echo "What is this? --> $1" >&2
 			exit 1
@@ -85,6 +91,12 @@ done
 if ! [[ "$NR_OF_FRAMES" =~ ^[0-9]+$ ]]
 	then
 		echo "Illegal argument: $NR_OF_FRAMES" >&2
+		exit 1
+fi
+
+if ! [[ "$NR_OF_FRAMES" =~ ^[0-9]+$ ]]
+	then
+		echo "Illegal argument: $SPEED, must be positive" >&2
 		exit 1
 fi
 
@@ -127,7 +139,7 @@ IMG_WIDTH="$(convert /tmp/marquee/res.png -ping -format "%w\n" info:)"
 
 IMG_INDEX=0
 
-for i in `seq 0 20 $((IMG_WIDTH-128))`;
+for i in `seq 0 50 $((IMG_WIDTH-128))`;
 do
 	convert -crop 128x128+$i+0 +repage /tmp/marquee/res.png /tmp/marquee/$IMG_INDEX.png
 	IMG_TMP_NAME="/tmp/marquee/"$IMG_INDEX
