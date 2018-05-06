@@ -75,7 +75,7 @@ do
 			OPTIMIZATION=$1
 			OPT_ON=true
 		;;
-		-optimize | -s)
+		-speed | -s)
 			shift
 			SPEED=$1
 		;;
