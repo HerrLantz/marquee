@@ -11,6 +11,23 @@ if [[ $OS_NAME != 'Darwin' ]] && [[ $OS_NAME != 'Linux' ]];
 		exit
 fi
 
+case $1 in
+  -help | -h)
+    echo "Welcome to the help page of marquee. Sorry but i can't help you.."
+    exit
+  ;;
+  -list-fonts | -lf)
+    convert -list font | grep Font: | sed 's/^.*: //g'
+    exit
+  ;;
+esac
+
+if [[ $# == 0 ]]
+    then
+     echo "Insufficient nr of arguments!"
+     exit
+fi
+
 # The text
 GIF_TEXT="$1"
 shift
@@ -35,7 +52,7 @@ OPT_ON=false
 
 SPEED=20
 
-# Check flags 
+# Check flags
 while [ "$1" ]
 do
 	case $1 in
@@ -52,10 +69,6 @@ do
 			shift
 			TEXT_COLOR=$1
 			#echo $TEXT_COLOR
-		;;
-		-help | -h)
-			echo "Welcome to the help page of gift. Sorry but i can't help you.."
-			exit
 		;;
 		-background-color | -b)
 			shift
@@ -78,7 +91,7 @@ do
 		-speed | -s)
 			shift
 			SPEED=$1
-		;;
+                ;;
 		*)
 			echo "What is this? --> $1" >&2
 			exit 1
@@ -101,13 +114,13 @@ if ! [[ "$NR_OF_FRAMES" =~ ^[0-9]+$ ]]
 fi
 
 if ! [[ "$TEXT_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray)$ ]]
-	then 
+	then
 		echo "Illegal argument: $TEXT_COLOR" >&2
 		exit 1
 fi
 
 if ! [[ "$BG_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray|none)$ ]]
-	then 
+	then
 		echo "Illegal argument: $BG_COLOR" >&2
 		exit 1
 fi
