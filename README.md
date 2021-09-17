@@ -57,6 +57,7 @@ Here are all the different flags that can be used! Look how nice they are.
 |-font/-t            |Name of font    |Sets the font on the text      |
 |-frames/-f          |Positiv integer |Depricated, does nothing       |
 |-optimization/-o    |0, 1, 2 or 3    |Optimizes the file size (lossy)|
+|-list-fonts/-lf     |no parameter    |Lists all possible fonts       |
 
 ## Examples
 
