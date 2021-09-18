@@ -100,6 +100,8 @@ do
 	shift
 done
 
+RGB_RGX="rgb\(((25[0-5]|2[0-4][0-9]|[01][0-9][0-9]|[1-9]?[0-9]),){2}(25[0-5]|2[0-4][0-9]|[01][0-9][0-9]|[1-9]?[0-9])\)"
+
 # Test that the number of frames is a positive integer
 if ! [[ "$NR_OF_FRAMES" =~ ^[0-9]+$ ]]
 	then
@@ -113,13 +115,13 @@ if ! [[ "$NR_OF_FRAMES" =~ ^[0-9]+$ ]]
 		exit 1
 fi
 
-if ! [[ "$TEXT_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray)$ ]]
+if ! [[ "$TEXT_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray|$RGB_RGX)$ ]]
 	then
 		echo "Illegal argument: $TEXT_COLOR" >&2
 		exit 1
 fi
 
-if ! [[ "$BG_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray|none)$ ]]
+if ! [[ "$BG_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray|none|$RGB_RGX)$ ]]
 	then
 		echo "Illegal argument: $BG_COLOR" >&2
 		exit 1
@@ -154,11 +156,11 @@ IMG_INDEX=0
 
 for i in `seq 0 $SPEED $((IMG_WIDTH-128))`;
 do
-	convert -crop 128x128+$i+0 +repage /tmp/marquee/res.png /tmp/marquee/$IMG_INDEX.png
-	IMG_TMP_NAME="/tmp/marquee/"$IMG_INDEX
-	IMG_TMP_NAME=$IMG_TMP_NAME".png "
-	GIF_FILES=$GIF_FILES$IMG_TMP_NAME
-	((IMG_INDEX++))
+  convert -crop 128x128+$i+0 +repage /tmp/marquee/res.png /tmp/marquee/$IMG_INDEX.png
+  IMG_TMP_NAME="/tmp/marquee/"$IMG_INDEX
+  IMG_TMP_NAME=$IMG_TMP_NAME".png "
+  GIF_FILES=$GIF_FILES$IMG_TMP_NAME
+  ((IMG_INDEX++))
 done
 
 rm /tmp/marquee/res.png
