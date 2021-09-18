@@ -32,9 +32,6 @@ fi
 GIF_TEXT="$1"
 shift
 
-# Default number of frames in the gif is set to 20
-NR_OF_FRAMES=20
-
 # Color of the text is set to black by default
 TEXT_COLOR="black"
 
@@ -50,6 +47,9 @@ FONT="Arial"
 OPTIMIZATION=0
 OPT_ON=false
 
+RAINBOW_BG=false
+RAINBOW_C=false
+
 SPEED=20
 
 # Check flags
@@ -60,20 +60,13 @@ do
 		shift
 			FILE_NAME="$1"
 		;;
-		-frames | -f)
-			shift
-			NR_OF_FRAMES="$1"
-			#echo $NR_OF_FRAMES
-		;;
 		-text-color | -c)
 			shift
 			TEXT_COLOR=$1
-			#echo $TEXT_COLOR
 		;;
 		-background-color | -b)
 			shift
 			BG_COLOR=$1
-			#echo $BG_COLOR
 		;;
 		-delay | -d)
 			shift
@@ -101,28 +94,21 @@ do
 done
 
 RGB_RGX="rgb\(((25[0-5]|2[0-4][0-9]|[01][0-9][0-9]|[1-9]?[0-9]),){2}(25[0-5]|2[0-4][0-9]|[01][0-9][0-9]|[1-9]?[0-9])\)"
-RGBA_RGX="rgba\(((25[0-5]|2[0-4][0-9]|[01][0-9][0-9]|[1-9]?[0-9])\,){2}(25[0-5]|2[0-4][0-9]|[01][0-9][0-9]|[1-9]?[0-9],(1\.0|0?\.[0-9]+|0|1))\)"
+RGBA_RGX="rgba\(((25[0-5]|2[0-4][0-9]|[01][0-9][0-9]|[1-9]?[0-9])\,){3}(1\.0|0?\.[0-9]+|0|1)\)"
 
-# Test that the number of frames is a positive integer
-if ! [[ "$NR_OF_FRAMES" =~ ^[0-9]+$ ]]
-	then
-		echo "Illegal argument: $NR_OF_FRAMES" >&2
-		exit 1
-fi
-
-if ! [[ "$NR_OF_FRAMES" =~ ^[0-9]+$ ]]
+if ! [[ "$SPEED" =~ ^[0-9]+$ ]]
 	then
 		echo "Illegal argument: $SPEED, must be positive" >&2
 		exit 1
 fi
 
-if ! [[ "$TEXT_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray|$RGB_RGX|$RGBA_RGX)$ ]]
+if ! [[ "$TEXT_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray|$RGB_RGX|$RGBA_RGX|rainbow)$ ]]
 	then
 		echo "Illegal argument: $TEXT_COLOR" >&2
 		exit 1
 fi
 
-if ! [[ "$BG_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray|none|$RGB_RGX|$RGBA_RGX)$ ]]
+if ! [[ "$BG_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray|none|$RGB_RGX|$RGBA_RGX|rainbow)$ ]]
 	then
 		echo "Illegal argument: $BG_COLOR" >&2
 		exit 1
@@ -140,31 +126,65 @@ if ! [ -d "/tmp/marquee" ];
 		mkdir /tmp/marquee
 fi
 
+if [[ "$BG_COLOR" =~ "rainbow" ]]
+   then
+     RAINBOW_BG=true
+     BG_COLOR="hsl(0,100%,50%)"
+fi
+
+if [[ "$TEXT_COLOR" =~ "rainbow" ]]
+   then
+     RAINBOW_C=true
+     TEXT_COLOR="hsl(0,100%,50%)"
+fi
 
 # Add 3 Images together, a center with the text and two padding images that only contain the background color
-convert -size 128x128 xc:$BG_COLOR /tmp/marquee/padding.png
-convert -background $BG_COLOR -fill $TEXT_COLOR -font "$FONT" -size x128 label:"$GIF_TEXT" /tmp/marquee/center.png
-convert /tmp/marquee/padding.png /tmp/marquee/center.png /tmp/marquee/padding.png +append /tmp/marquee/res.png
+create_image() {
+  convert -size 128x128 xc:$BG_COLOR /tmp/marquee/padding.png
+  convert -background $BG_COLOR -fill $TEXT_COLOR -font "$FONT" -size x128 label:"$GIF_TEXT" /tmp/marquee/center.png
+  convert /tmp/marquee/padding.png /tmp/marquee/center.png /tmp/marquee/padding.png +append /tmp/marquee/res.png
+  rm /tmp/marquee/padding.png
+  rm /tmp/marquee/center.png
+}
 
-# Remove center and padding of the image
-rm /tmp/marquee/padding.png
-rm /tmp/marquee/center.png
+
+get_width() {
+  create_image
+  echo "$(convert /tmp/marquee/res.png -ping -format "%w\n" info:)"
+}
+
+create_image
 
 # Get the width of the image
-IMG_WIDTH="$(convert /tmp/marquee/res.png -ping -format "%w\n" info:)"
+IMG_WIDTH=$(get_width)
+FRAME_OFFSET=($(seq 0 $SPEED $((IMG_WIDTH-128))))
+NR_OF_FRAMES=${#FRAME_OFFSET[@]}
 
 IMG_INDEX=0
 
-for i in `seq 0 $SPEED $((IMG_WIDTH-128))`;
+for i in "${FRAME_OFFSET[@]}";
 do
+  if $RAINBOW_BG;
+     then
+       HUE=$(( (360 / $NR_OF_FRAMES) * $IMG_INDEX ))
+       BG_COLOR="hsl("$HUE",100%,50%)"
+  fi
+  if $RAINBOW_C
+     then
+     HUE=$(( (180 + ((360 / $NR_OF_FRAMES) * $IMG_INDEX) ) % 260 ))
+     TEXT_COLOR="hsl("$HUE",100%,50%)"
+  fi
+  if $RAINBOW_BG || $RAINBOW_BG
+     then
+       create_image
+  fi
+
   convert -crop 128x128+$i+0 +repage /tmp/marquee/res.png /tmp/marquee/$IMG_INDEX.png
   IMG_TMP_NAME="/tmp/marquee/"$IMG_INDEX
   IMG_TMP_NAME=$IMG_TMP_NAME".png "
   GIF_FILES=$GIF_FILES$IMG_TMP_NAME
   ((IMG_INDEX++))
 done
-
-rm /tmp/marquee/res.png
 
 # Create the gif
 convert -dispose Background -coalesce -colors 8 -delay $DELAY $GIF_FILES $FILE_NAME
@@ -174,5 +194,5 @@ if $OPT_ON ; then
 	gifsicle -O3 $FILE_NAME -o $FILE_NAME
 fi
 
-# Clean up the temporary files
+# Clear temporary files
 rm /tmp/marquee/*
