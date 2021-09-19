@@ -54,6 +54,8 @@ SPEED=20
 
 BLUR=false
 BLUR_LEVEL=0x0
+
+SWIRL=false
 SWIRL_DEGREE=0
 
 # Check flags
@@ -96,6 +98,7 @@ do
                 ;;
                 -swirl | -s)
                         shift
+                        SWIRL=true
                         SWIRL_DEGREE=$1
                 ;;
 		*)
