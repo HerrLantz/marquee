@@ -53,6 +53,8 @@ RAINBOW_C=false
 SPEED=20
 
 BLUR=false
+BLUR_LEVEL=0x0
+SWIRL_DEGREE=0
 
 # Check flags
 while [ "$1" ]
@@ -91,6 +93,10 @@ do
                         shift
                         BLUR=true
                         BLUR_LEVEL=$1
+                ;;
+                -swirl | -s)
+                        shift
+                        SWIRL_DEGREE=$1
                 ;;
 		*)
 			echo "What is this? --> $1" >&2
@@ -131,6 +137,12 @@ if ! [[ "$BLUR_LEVEL" =~ ^[0-9]+x[0-9]+$ ]]
    then
      echo "Illegal argument: $BLUR_LEVEL" >&2
      exit 1
+fi
+
+if ! [[ "$SWIRL_DEGREE" =~ ^[0-9]+$ ]]
+then
+  echo "Illegal argument: $SWIRL_DEGREE" >&2
+  exit 1
 fi
 
 # Create a temporary dir for marquee to put temporary files
@@ -205,6 +217,11 @@ convert -dispose Background -coalesce -colors 8 -delay $DELAY $GIF_FILES $FILE_N
 if $BLUR
 then
   convert $FILE_NAME -blur $BLUR_LEVEL $FILE_NAME
+fi
+
+if $SWIRL
+then
+  convert $FILE_NAME -swirl 360 $FILE_NAME
 fi
 
 # Optimize the file size of the gif with gifsicle
