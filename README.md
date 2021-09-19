@@ -40,25 +40,6 @@ chmod 755 marquee
 ```
 
 
-## Creating marquee gifs
-To run **Marquee** simply type `marquee [text] [OPTIONS]` in the terminal.
-If you are having trouble running **Marquee**, type `marquee -help` or `marquee -h` to get various help.
-
-
-Here are all the different flags that can be used! Look how nice they are.
-
-|Flag	             |Parameter	      |Effect                         |
-|:-------------------|:--------------:|------------------------------:|
-|-name/-n            |.+\\.gif        |The name of the outputed gif   |
-|-text-color/-c.     |name of a color |Sets the text color 		      |
-|-background-color/-b|name of a color |Sets the background color      |
-|-help/-h            |no parameter    |Gives help to slow people      |
-|-delay/-d 			 |Positiv integer |Sets the delay between frames  |
-|-font/-t            |Name of font    |Sets the font on the text      |
-|-frames/-f          |Positiv integer |Depricated, does nothing       |
-|-optimization/-o    |0, 1, 2 or 3    |Optimizes the file size (lossy)|
-|-list-fonts/-lf     |no parameter    |Lists all possible fonts       |
-
 ## Examples
 
 ```
@@ -70,6 +51,27 @@ marquee "Marquee is the best program ever" -background-color none -text-color ma
 marquee "Color blind people are superior" -b yellow -c brown
 ```
 ![Another great example](https://raw.githubusercontent.com/HerrLantz/marquee/master/examples/example2.gif "I wish I was like Patric")
+
+## Creating marquee gifs
+To run **Marquee** simply type `marquee [text] [OPTIONS]` in the terminal.
+If you are having trouble running **Marquee**, type `marquee -help` or `marquee -h` to get various help.
+
+
+Here are all the different flags that can be used! Look how nice they are.
+
+|Flag	             |Parameter	      |Effect                               |
+|:-------------------|:--------------:|------------------------------------:|
+|-name/-n            |.+\\.gif        |The name of the outputed gif         |
+|-text-color/-c.     |name of a color |Sets the text color 		            |
+|-background-color/-b|name of a color |Sets the background color            |
+|-help/-h            |no parameter    |Gives help to slow people            |
+|-delay/-d 			 |Positiv integer |Sets the delay between frames        |
+|-font/-t            |Name of font    |Sets the font on the text            |
+|-frames/-f          |Positiv integer |Depricated, does nothing             |
+|-optimization/-o    |0, 1, 2 or 3    |Optimizes the file size (lossy)      |
+|-list-fonts/-lf     |no parameter    |Lists all possible fonts             |
+|-gaussian-blur/-gs  |[0-9]+x[0-9]+   |Blur each frame of the gif           |
+|-swirl/-s           |Integer         |Swirl each frame by the given degree | 
 
 ## Windows
 
