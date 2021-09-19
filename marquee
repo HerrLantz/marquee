@@ -52,6 +52,8 @@ RAINBOW_C=false
 
 SPEED=20
 
+BLUR=false
+
 # Check flags
 while [ "$1" ]
 do
@@ -84,6 +86,11 @@ do
 		-speed | -s)
 			shift
 			SPEED=$1
+                ;;
+                -gaussian-blur | -gs)
+                        shift
+                        BLUR=true
+                        BLUR_LEVEL=$1
                 ;;
 		*)
 			echo "What is this? --> $1" >&2
@@ -118,6 +125,12 @@ if ! [[ "$OPTIMIZATION" =~ ^(0|1|2|3)$ ]]
 	then
 		echo "Illegal argument: $OPTIMIZATION" >&2
 		exit 1
+fi
+
+if ! [[ "$BLUR_LEVEL" =~ ^[0-9]+x[0-9]+$ ]]
+   then
+     echo "Illegal argument: $BLUR_LEVEL" >&2
+     exit 1
 fi
 
 # Create a temporary dir for marquee to put temporary files
@@ -189,9 +202,14 @@ done
 # Create the gif
 convert -dispose Background -coalesce -colors 8 -delay $DELAY $GIF_FILES $FILE_NAME
 
+if $BLUR
+then
+  convert $FILE_NAME -blur $BLUR_LEVEL $FILE_NAME
+fi
+
 # Optimize the file size of the gif with gifsicle
 if $OPT_ON ; then
-	gifsicle -O3 $FILE_NAME -o $FILE_NAME
+	gifsicle -O$OPTIMIZATION $FILE_NAME -o $FILE_NAME
 fi
 
 # Clear temporary files
