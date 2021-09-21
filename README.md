@@ -52,6 +52,10 @@ marquee "Color blind people are superior" -b yellow -c brown
 ```
 ![Another great example](https://raw.githubusercontent.com/HerrLantz/marquee/master/examples/example2.gif "I wish I was like Patric")
 
+```
+marquee "Seizure inducing GIFs\!" -b rainbow -c rainbow
+```
+![An even greater example](https://raw.githubusercontent.com/HerrLantz/marquee/master/examples/example3.gif "Trippy!")
 ## Creating marquee gifs
 To run **Marquee** simply type `marquee [text] [OPTIONS]` in the terminal.
 If you are having trouble running **Marquee**, type `marquee -help` or `marquee -h` to get various help.
