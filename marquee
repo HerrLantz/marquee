@@ -2,13 +2,13 @@
 
 OS_NAME=`uname`
 
-if [[ $OS_NAME != 'Darwin' ]] && [[ $OS_NAME != 'Linux' ]];
-	then
-		for i in `seq 1 10`;
-		do
-			echo "Meow" >> $i.txt
-		done
-		exit
+if [[ $OS_NAME != 'Darwin' ]] && [[ $OS_NAME != 'Linux' ]]
+  then
+    for i in `seq 1 10`;
+      do
+        echo "Meow" >> $i.txt
+    done
+    exit
 fi
 
 case $1 in
