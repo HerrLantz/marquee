@@ -40,7 +40,9 @@ TEXT_COLOR_FLASH_ALT="black"
 
 # 4:th argument is the background color
 BG_COLOR="white"
-BG_COLOR_ALT="white"
+
+BG_COLOR_FLASH="white"
+BG_COLOR_FLASH_ALT="white"
 
 FILE_NAME="out.gif"
 
@@ -63,13 +65,14 @@ SWIRL=false
 SWIRL_DEGREE=0
 
 FLASH_TEXT=false
+FLASH_BG=false
 
 # Check flags
 while [ "$1" ]
 do
 	case $1 in
 		-name | -n)
-		shift
+		        shift
 			FILE_NAME="$1"
 		;;
 		-text-color | -c)
@@ -119,7 +122,7 @@ RGB_RGX="rgb\(((25[0-5]|2[0-4][0-9]|[01][0-9][0-9]|[1-9]?[0-9]),){2}(25[0-5]|2[0
 RGBA_RGX="rgba\(((25[0-5]|2[0-4][0-9]|[01][0-9][0-9]|[1-9]?[0-9])\,){3}(1\.0|0?\.[0-9]+|0|1)\)"
 COLORS_RGX="(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray)"
 ALL_COLORS_RGX="(${RGB_RGX}|${RGBA_RGX}|${COLORS_RGX})"
-FLASHING_RGX="flash\(${ALL_COLORS_RGX},${ALL_COLORS_RGX}\)"
+FLASHING_RGX=" *flash\( *${ALL_COLORS_RGX} *, *${ALL_COLORS_RGX} *\) *"
 
 FLOAT_RGX="[0-9]*\.?[0-9]+"
 
@@ -135,7 +138,7 @@ if ! [[ "$TEXT_COLOR" =~ ^($ALL_COLORS_RGX|$FLASHING_RGX|rainbow)$ ]]
 		exit 1
 fi
 
-if ! [[ "$BG_COLOR" =~ ^(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray|none|$RGB_RGX|$RGBA_RGX|rainbow)$ ]]
+if ! [[ "$BG_COLOR" =~ ^($ALL_COLORS_RGX|$FLASHING_RGX|rainbow|none)$ ]]
 	then
 		echo "Illegal argument: $BG_COLOR" >&2
 		exit 1
@@ -179,13 +182,25 @@ fi
 
 if [[ "$TEXT_COLOR" =~ $FLASHING_RGX ]]
    then
-     COLORS=$(sed 's/(//g; s/)//g; s/flash//g' <<< $TEXT_COLOR)
+     COLORS=$(sed 's/(//g; s/)//g; s/flash//g; s/\s+//g' <<< $TEXT_COLOR)
      IFS=','
      read -a COLORS <<< "$COLORS"
      TEXT_COLOR_FLASH=${COLORS[0]}
      TEXT_COLOR_FLASH_ALT=${COLORS[1]}
      TEXT_COLOR=${COLORS[0]}
      FLASH_TEXT=true
+     unset IFS
+fi
+
+if [[ "$BG_COLOR" =~ $FLASHING_RGX ]]
+   then
+     COLORS=$(sed 's/(//g; s/)//g; s/flash//g; s/\s+//g' <<< $BG_COLOR)
+     IFS=','
+     read -a COLORS <<< "$COLORS"
+     BG_COLOR_FLASH=${COLORS[0]}
+     BG_COLOR_FLASH_ALT=${COLORS[1]}
+     BG_COLOR=${COLORS[0]}
+     FLASH_BG=true
      unset IFS
 fi
 
@@ -225,10 +240,7 @@ do
        HUE=$(( (180 + ((360 / $NR_OF_FRAMES) * $IMG_INDEX) ) % 260 ))
        TEXT_COLOR="hsl("$HUE",100%,50%)"
   fi
-  if $RAINBOW_BG || $RAINBOW_BG
-     then
-       create_image
-  fi
+  
   if $FLASH_TEXT
      then
        if (( $IMG_INDEX % 8 < 4 )); then
@@ -238,6 +250,18 @@ do
          TEXT_COLOR=$TEXT_COLOR_FLASH_ALT
          create_image
        fi
+  fi
+  if $FLASH_BG
+     then
+       if (( $IMG_INDEX % 8 < 4 )); then
+         BG_COLOR=$BG_COLOR_FLASH
+       else
+         BG_COLOR=$BG_COLOR_FLASH_ALT
+       fi
+  fi
+  if $RAINBOW_BG || $RAINBOW_BG || $FLASH_TEXT || $FLASH_BG
+     then
+       create_image
   fi
   convert -crop 128x128+$i+0 +repage /tmp/marquee/res.png /tmp/marquee/$IMG_INDEX.png
   IMG_TMP_NAME="/tmp/marquee/"$IMG_INDEX
