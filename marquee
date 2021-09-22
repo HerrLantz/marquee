@@ -120,7 +120,7 @@ done
 
 RGB_RGX="rgb\(((25[0-5]|2[0-4][0-9]|[01][0-9][0-9]|[1-9]?[0-9]),){2}(25[0-5]|2[0-4][0-9]|[01][0-9][0-9]|[1-9]?[0-9])\)"
 RGBA_RGX="rgba\(((25[0-5]|2[0-4][0-9]|[01][0-9][0-9]|[1-9]?[0-9])\,){3}(1\.0|0?\.[0-9]+|0|1)\)"
-COLORS_RGX="(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray)"
+COLORS_RGX="(white|black|red|green|blue|yellow|purple|orange|cyan|indigo|magenta|pink|brown|gray|none)"
 ALL_COLORS_RGX="(${RGB_RGX}|${RGBA_RGX}|${COLORS_RGX})"
 FLASHING_RGX=" *flash\( *${ALL_COLORS_RGX} *, *${ALL_COLORS_RGX} *\) *"
 
@@ -138,7 +138,7 @@ if ! [[ "$TEXT_COLOR" =~ ^($ALL_COLORS_RGX|$FLASHING_RGX|rainbow)$ ]]
 		exit 1
 fi
 
-if ! [[ "$BG_COLOR" =~ ^($ALL_COLORS_RGX|$FLASHING_RGX|rainbow|none)$ ]]
+if ! [[ "$BG_COLOR" =~ ^($ALL_COLORS_RGX|$FLASHING_RGX|rainbow)$ ]]
 	then
 		echo "Illegal argument: $BG_COLOR" >&2
 		exit 1
@@ -245,10 +245,8 @@ do
      then
        if (( $IMG_INDEX % 8 < 4 )); then
          TEXT_COLOR=$TEXT_COLOR_FLASH
-         create_image
        else
          TEXT_COLOR=$TEXT_COLOR_FLASH_ALT
-         create_image
        fi
   fi
   if $FLASH_BG
@@ -259,7 +257,7 @@ do
          BG_COLOR=$BG_COLOR_FLASH_ALT
        fi
   fi
-  if $RAINBOW_BG || $RAINBOW_BG || $FLASH_TEXT || $FLASH_BG
+  if $RAINBOW_TEXT || $RAINBOW_BG || $FLASH_TEXT || $FLASH_BG
      then
        create_image
   fi
